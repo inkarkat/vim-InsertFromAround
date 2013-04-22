@@ -1,0 +1,112 @@
+*InsertFromAround.txt*  Insert-mode mappings to fetch text or indent from surrounding lines.
+
+		     INSERT FROM AROUND    by Ingo Karkat
+							*InsertFromAround.vim*
+description			|InsertFromAround-description|
+usage				|InsertFromAround-usage|
+installation			|InsertFromAround-installation|
+configuration			|InsertFromAround-configuration|
+integration			|InsertFromAround-integration|
+limitations			|InsertFromAround-limitations|
+known problems			|InsertFromAround-known-problems|
+todo				|InsertFromAround-todo|
+history				|InsertFromAround-history|
+
+==============================================================================
+DESCRIPTION					*InsertFromAround-description*
+
+This plugin ...
+
+HOW IT WORKS								     *
+
+SOURCE									     *
+
+- The i_CTRL-E / i_CTRL-Y mappings are based on
+    http://www.ibm.com/developerworks/linux/library/l-vim-script-1/index.html?ca=drs-
+
+SEE ALSO								     *
+(Plugins offering complementary functionality, or plugins using this library.)
+
+RELATED WORKS								     *
+(Alternatives from other authors, other approaches, references not used here.)
+
+==============================================================================
+USAGE						      *InsertFromAround-usage*
+
+<i_SHIFT-Enter>		Insert carriage return and indent the new line to the
+			current cursor column. This takes into account
+			indent-expressions and insertion of the comment leader.
+i_CTRL-E / i_CTRL-Y	Insert the character from visible lines below / above
+			the cursor; if the adjacent line is not that long, look
+			beyond. The command beeps and suspends insert once if
+			the current target line has been exhausted.
+i_CTRL-G_CTRL-E / i_CTRL-G_CTRL-Y
+			Insert an entire word from visible lines below / above
+			the cursor and toggle the behavior of |i_CTRL-E| /
+			|i_CTRL-Y| to continue inserting words. The behavior
+			reverts itself when inserting in another line or by
+			using this mapping a second time.
+i_CTRL-G_CTRL-U		Insert the indent from the next nearby visible line that
+			has at least as much indent as the current cursor
+			position. If the visible indent before and after the
+			current line differs, the smaller amount is inserted;
+			repeat the mapping to get the larger amount.
+
+EXAMPLE						    *InsertFromAround-example*
+
+==============================================================================
+INSTALLATION				       *InsertFromAround-installation*
+
+This script is packaged as a |vimball|. If you have the "gunzip" decompressor
+in your PATH, simply edit the *.vmb.gz package in Vim; otherwise, decompress
+the archive first, e.g. using WinZip. Inside Vim, install by sourcing the
+vimball or via the |:UseVimball| command. >
+    vim InsertFromAround*.vmb.gz
+    :so %
+To uninstall, use the |:RmVimball| command.
+
+DEPENDENCIES				       *InsertFromAround-dependencies*
+
+- Requires Vim 7.0 or higher.
+- Requires the |ingo-library.vim| plugin (vimscript #4433), version 1.005 or
+  higher.
+
+==============================================================================
+CONFIGURATION				      *InsertFromAround-configuration*
+
+For a permanent configuration, put the following commands into your |vimrc|:
+configvar
+						      *InsertFromAround-remap*
+plugmap
+
+==============================================================================
+INTEGRATION					*InsertFromAround-integration*
+
+==============================================================================
+LIMITATIONS					*InsertFromAround-limitations*
+
+KNOWN PROBLEMS				     *InsertFromAround-known-problems*
+
+TODO						       *InsertFromAround-todo*
+
+IDEAS						      *InsertFromAround-ideas*
+
+==============================================================================
+HISTORY						    *InsertFromAround-history*
+
+GOAL
+First published version.
+
+0.90	14-Apr-2013
+Separated into independent plugin.
+
+0.01	07-May-2009
+Started development.
+
+==============================================================================
+Copyright: (C) 2009-2013 Ingo Karkat
+The VIM LICENSE applies to this plugin; see |copyright|.
+
+Maintainer:	Ingo Karkat <ingo@karkat.de>
+==============================================================================
+ vim:tw=78:ts=8:ft=help:norl:
