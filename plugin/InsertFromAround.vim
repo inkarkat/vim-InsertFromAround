@@ -1,7 +1,9 @@
 " InsertFromAround.vim: Insert-mode mappings to fetch text or indent from surrounding lines.
 "
 " DEPENDENCIES:
-"   - InsertFromAround.vim autoload script
+"   - InsertFromAround/Indent.vim autoload script
+"   - InsertFromAround/Newline.vim autoload script
+"   - InsertFromAround/Text.vim autoload script
 "
 " Copyright: (C) 2009-2013 Ingo Karkat
 "   The VIM LICENSE applies to this script; see ':help copyright'.
@@ -17,8 +19,8 @@ if exists('g:loaded_InsertFromAround') || (v:version < 700)
 endif
 let g:loaded_InsertFromAround = 1
 
-inoremap <expr> <SID>RecordColumn InsertFromAround#RecordColumn()
-inoremap <silent> <script> <S-CR> InsertFromAround#RecordColumn$<Left><CR><Esc>:call InsertFromAround#IndentNewLine()<CR>
+inoremap <expr> <SID>RecordColumn InsertFromAround#Newline#RecordColumn()
+inoremap <silent> <script> <S-CR> InsertFromAround#Newline#RecordColumn$<Left><CR><Esc>:call InsertFromAround#Newline#Insert()<CR>
 " This will repeat the <Enter> or just the text entered after the mapping (if
 " done) on "." in normal mode.
 
@@ -33,12 +35,12 @@ inoremap <silent> <script> <S-CR> InsertFromAround#RecordColumn$<Left><CR><Esc>:
 "inoremap <silent> <C-G><C-E> <C-R><C-R>=<SID>InsertWordFromAround(0)<CR>
 "inoremap <silent> <C-G><C-Y> <C-R><C-R>=<SID>InsertWordFromAround(1)<CR>
 
-inoremap <silent> <Plug>InsertFromBelow <C-R><C-R>=InsertFromAround#InsertToggleFromAround(0,0)<CR>
-inoremap <silent> <Plug>InsertFromAbove <C-R><C-R>=InsertFromAround#InsertToggleFromAround(1,0)<CR>
-inoremap <silent> <C-G><C-E> <C-R><C-R>=InsertFromAround#InsertToggleFromAround(0,1)<CR>
-inoremap <silent> <C-G><C-Y> <C-R><C-R>=InsertFromAround#InsertToggleFromAround(1,1)<CR>
+inoremap <silent> <Plug>InsertFromBelow <C-R><C-R>=InsertFromAround#Text#Toggled(0,0)<CR>
+inoremap <silent> <Plug>InsertFromAbove <C-R><C-R>=InsertFromAround#Text#Toggled(1,0)<CR>
+inoremap <silent> <C-G><C-E> <C-R><C-R>=InsertFromAround#Text#Toggled(0,1)<CR>
+inoremap <silent> <C-G><C-Y> <C-R><C-R>=InsertFromAround#Text#Toggled(1,1)<CR>
 
 
-inoremap <silent> <C-g><C-u> <C-r><C-o>=InsertFromAround#InsertIndentFromAround()<CR>
+inoremap <silent> <C-g><C-u> <C-r><C-o>=InsertFromAround#Indent#Insert()<CR>
 
 " vim: set ts=8 sts=4 sw=4 noexpandtab ff=unix fdm=syntax :
