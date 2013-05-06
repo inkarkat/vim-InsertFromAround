@@ -33,24 +33,42 @@ RELATED WORKS								     *
 ==============================================================================
 USAGE						      *InsertFromAround-usage*
 
-<i_SHIFT-Enter>		Insert carriage return and indent the new line to the
+							       *i_SHIFT-Enter*
+SHIFT-Enter		Insert carriage return and indent the new line to the
 			current cursor column. This takes into account
 			indent-expressions and insertion of the comment leader.
-i_CTRL-E / i_CTRL-Y	Insert the character from visible lines below / above
+
+
+							 *i_CTRL-E* *i_CTRL-Y*
+CTRL-E / CTRL-Y		Insert the character from visible lines below / above
 			the cursor; if the adjacent line is not that long, look
 			beyond. The command beeps and suspends insert once if
 			the current target line has been exhausted.
-i_CTRL-G_CTRL-E / i_CTRL-G_CTRL-Y
+					   *i_CTRL-G_CTRL-E* *i_CTRL-G_CTRL-Y*
+CTRL-G CTRL-E / CTRL-G CTRL-Y
 			Insert an entire word from visible lines below / above
 			the cursor and toggle the behavior of |i_CTRL-E| /
 			|i_CTRL-Y| to continue inserting words. The behavior
 			reverts itself when inserting in another line or by
 			using this mapping a second time.
-i_CTRL-G_CTRL-U		Insert the indent from the next nearby visible line that
+
+							     *i_CTRL-G_CTRL-U*
+CTRL-G CTRL-U		Insert the indent from the next nearby visible line that
 			has at least as much indent as the current cursor
 			position. If the visible indent before and after the
 			current line differs, the smaller amount is inserted;
 			repeat the mapping to get the larger amount.
+
+
+							     *i_CTRL-G_CTRL-D*
+CTRL-G CTRL-D		Remove whitespace before the cursor so that the
+			current cursor position aligns with the start of
+			preceding non-whitespace text in the previous visible
+			line.
+							     *i_CTRL-G_CTRL-T*
+CTRL-G CTRL-T		Insert whitespace so that the text after the cursor
+			aligns with the start of following non-whitespace text
+			in the previous visible line.
 
 EXAMPLE						    *InsertFromAround-example*
 
