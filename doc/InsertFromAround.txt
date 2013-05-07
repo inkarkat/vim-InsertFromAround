@@ -58,6 +58,7 @@ CTRL-G CTRL-U		Insert the indent from the next nearby visible line that
 			position. If the visible indent before and after the
 			current line differs, the smaller amount is inserted;
 			repeat the mapping to get the larger amount.
+			(Mnemonic: Undo the effect of |i_CTRL-U|.)
 
 
 							     *i_CTRL-G_CTRL-D*
