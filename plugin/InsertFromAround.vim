@@ -25,22 +25,34 @@ inoremap <silent> <script> <S-CR> InsertFromAround#Newline#RecordColumn$<Left><C
 " done) on "." in normal mode.
 
 " Now using toggling, see below.
-"inoremap <silent> <Plug>InsertFromBelow <C-R><C-R>=<SID>InsertFromAround(0,'.')<CR>
-"inoremap <silent> <Plug>InsertFromAbove <C-R><C-R>=<SID>InsertFromAround(1,'.')<CR>
+"inoremap <silent> <Plug>InsertFromBelow <C-r><C-r>=<SID>InsertFromAround(0,'.')<CR>
+"inoremap <silent> <Plug>InsertFromAbove <C-r><C-r>=<SID>InsertFromAround(1,'.')<CR>
 " Additionally overloaded with "Inline Completion" and moved to ingocompletion.vim.
-"imap <expr> <C-E> pumvisible() ? '<C-E>' : '<Plug>InsertFromBelow'
-"imap <expr> <C-Y> pumvisible() ? '<C-Y>' : '<Plug>InsertFromAbove'
+"imap <expr> <C-e> pumvisible() ? '<C-e>' : '<Plug>InsertFromBelow'
+"imap <expr> <C-y> pumvisible() ? '<C-y>' : '<Plug>InsertFromAbove'
 
 " Now using toggling, see below.
-"inoremap <silent> <C-G><C-E> <C-R><C-R>=<SID>InsertWordFromAround(0)<CR>
-"inoremap <silent> <C-G><C-Y> <C-R><C-R>=<SID>InsertWordFromAround(1)<CR>
+"inoremap <silent> <C-g><C-e> <C-r><C-r>=<SID>InsertWordFromAround(0)<CR>
+"inoremap <silent> <C-g><C-y> <C-r><C-r>=<SID>InsertWordFromAround(1)<CR>
 
-inoremap <silent> <Plug>InsertFromBelow <C-R><C-R>=InsertFromAround#Text#Toggled(0,0)<CR>
-inoremap <silent> <Plug>InsertFromAbove <C-R><C-R>=InsertFromAround#Text#Toggled(1,0)<CR>
-inoremap <silent> <C-G><C-E> <C-R><C-R>=InsertFromAround#Text#Toggled(0,1)<CR>
-inoremap <silent> <C-G><C-Y> <C-R><C-R>=InsertFromAround#Text#Toggled(1,1)<CR>
+inoremap <silent> <Plug>InsertFromBelow <C-r><C-r>=InsertFromAround#Text#Toggled(0,0)<CR>
+inoremap <silent> <Plug>InsertFromAbove <C-r><C-r>=InsertFromAround#Text#Toggled(1,0)<CR>
+inoremap <silent> <C-g><C-e> <C-r><C-r>=InsertFromAround#Text#Toggled(0,1)<CR>
+inoremap <silent> <C-g><C-y> <C-r><C-r>=InsertFromAround#Text#Toggled(1,1)<CR>
 
 
+
+" Use i_CTRL-R_CTRL-O to insert the indent literally without auto-indenting.
 inoremap <silent> <C-g><C-u> <C-r><C-o>=InsertFromAround#Indent#Insert()<CR>
+
+
+
+" Use i_CTRL-R to insert the indenting <Tab> characters as typed, so that the
+" indent settings apply and the added whitespace is fused with preceding
+" whitespace.
+inoremap <silent> <C-g><C-d> <C-r>=InsertFromAround#Align#AlignToPrevious()<CR>
+" For dedenting, we directly manipulate the line with setline(), and only
+" possibly return typed characters to cause a beep.
+inoremap <silent> <C-g><C-t> <C-r>=InsertFromAround#Align#AlignToNext()<CR>
 
 " vim: set ts=8 sts=4 sw=4 noexpandtab ff=unix fdm=syntax :
