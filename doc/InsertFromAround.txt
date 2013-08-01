@@ -28,7 +28,9 @@ SEE ALSO								     *
 (Plugins offering complementary functionality, or plugins using this library.)
 
 RELATED WORKS								     *
-(Alternatives from other authors, other approaches, references not used here.)
+
+- The prev_indent plugin (vimscript #4575) provides an insert mode mapping and
+  :PrevIndent to move the current line to the previous indentation level.
 
 ==============================================================================
 USAGE						      *InsertFromAround-usage*
