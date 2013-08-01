@@ -11,6 +11,8 @@
 " Maintainer:	Ingo Karkat <ingo@karkat.de>
 "
 " REVISION	DATE		REMARKS
+"	002	04-Jun-2013	FIX: <S-CR> mapping broken by incomplete
+"				factoring out of <SID>(RecordColumn).
 "	001	14-Apr-2013	file creation from ingomappings.vim
 
 " Avoid installing twice or when in unsupported Vim version.
@@ -19,8 +21,8 @@ if exists('g:loaded_InsertFromAround') || (v:version < 700)
 endif
 let g:loaded_InsertFromAround = 1
 
-inoremap <expr> <SID>RecordColumn InsertFromAround#Newline#RecordColumn()
-inoremap <silent> <script> <S-CR> InsertFromAround#Newline#RecordColumn$<Left><CR><Esc>:call InsertFromAround#Newline#Insert()<CR>
+inoremap <expr> <SID>(RecordColumn) InsertFromAround#Newline#RecordColumn()
+inoremap <silent> <script> <S-CR> <SID>(RecordColumn)$<Left><CR><Esc>:call InsertFromAround#Newline#Insert()<CR>
 " This will repeat the <Enter> or just the text entered after the mapping (if
 " done) on "." in normal mode.
 
