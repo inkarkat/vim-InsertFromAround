@@ -11,6 +11,9 @@
 " Maintainer:	Ingo Karkat <ingo@karkat.de>
 "
 " REVISION	DATE		REMARKS
+"	003	02-Aug-2013	CHG: Remap <S-CR> to <C-CR>, as I need the
+"				<S-CR> imap for a mapping consistent with normal
+"				mode.
 "	002	04-Jun-2013	FIX: <S-CR> mapping broken by incomplete
 "				factoring out of <SID>(RecordColumn).
 "	001	14-Apr-2013	file creation from ingomappings.vim
@@ -22,7 +25,7 @@ endif
 let g:loaded_InsertFromAround = 1
 
 inoremap <expr> <SID>(RecordColumn) InsertFromAround#Newline#RecordColumn()
-inoremap <silent> <script> <S-CR> <SID>(RecordColumn)$<Left><CR><Esc>:call InsertFromAround#Newline#Insert()<CR>
+inoremap <silent> <script> <C-CR> <SID>(RecordColumn)$<Left><CR><Esc>:call InsertFromAround#Newline#Insert()<CR>
 " This will repeat the <Enter> or just the text entered after the mapping (if
 " done) on "." in normal mode.
 
