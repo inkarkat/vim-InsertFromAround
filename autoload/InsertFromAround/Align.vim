@@ -45,13 +45,25 @@ function! InsertFromAround#Align#AlignToPrevious()
     endif
 
     let l:deleteColumns = l:currentVirtCol - l:alignVirtCol
-echomsg '**** align' l:currentVirtCol 'to' l:alignVirtCol ':' l:deleteColumns
-
+"****D echomsg '**** align' l:currentVirtCol 'to' l:alignVirtCol ':' l:deleteColumns
     let l:line = getline('.')
     let l:beforeAlign = matchstr(l:line, '^.*\%<' . (l:alignVirtCol + 1) . 'v')
     let l:afterCursor  = matchstr(l:line, '\%>' . (l:currentVirtCol - 1) . 'v.*')
-    let l:padding = repeat(' ', l:alignVirtCol - 1 - ingo#compat#strdisplaywidth(l:beforeAlign))
-    let l:beforeCursor = l:beforeAlign . l:padding
+    let l:removed = strpart(l:line, len(l:beforeAlign), len(l:line) - len(l:beforeAlign) - len(l:afterCursor))
+    if l:removed =~# '^\s*$'
+	let l:padding = repeat(' ', l:alignVirtCol - 1 - ingo#compat#strdisplaywidth(l:beforeAlign))
+	let l:beforeCursor = l:beforeAlign . l:padding
+    else
+	" There is text between the align position and the cursor. Remove as
+	" much whitespace from the end as possible, but do not remove any text.
+	let l:remainder = substitute(l:removed, '\s\+$', '', '')
+	if l:remainder ==# l:removed
+	    " Beep when nothing could be removed.
+	    return "\<C-\>\<C-o>\<Esc>" " Beep.
+	endif
+	let l:beforeCursor = l:beforeAlign . l:remainder
+    endif
+
     let l:replacedLine = l:beforeCursor . l:afterCursor
     call setline('.', l:replacedLine)
     call cursor(0, len(l:beforeCursor) + 1)
