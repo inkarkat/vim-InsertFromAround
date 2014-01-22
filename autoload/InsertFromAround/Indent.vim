@@ -10,6 +10,12 @@
 " Maintainer:	Ingo Karkat <ingo@karkat.de>
 "
 " REVISION	DATE		REMARKS
+"	002	07-May-2013	When there's only whitespace before the cursor,
+"				replace it with the indent; instead of returning
+"				the delta whitespace, this also correctly
+"				handles the case when a <Tab> is appended to
+"				existing spaces: The spaces should be dropped,
+"				as they do not contribute to the indent.
 "	001	14-Apr-2013	file creation from ingomappings.vim
 
 function! s:SortByDisplayWidth( i1, i2 )
@@ -21,6 +27,17 @@ function! s:DeltaIndent( indent )
     let l:widthBeforeCursor = virtcol('.') - 1
     if l:widthBeforeCursor == 0
 	return a:indent
+    endif
+
+    let l:beforeCursor = strpart(getline('.'), 0, col('.') - 1)
+    if l:beforeCursor =~# '^\s\+'
+	" There's only whitespace before the cursor. Replace it with the indent;
+	" in contrast to returning the delta whitespace, this also correctly
+	" handles the case when a <Tab> is appended to existing spaces: The
+	" spaces should be dropped, as they do not contribute to the indent.
+	call setline('.', a:indent . strpart(getline('.'), col('.') - 1))
+	call cursor(0, len(a:indent) + 1)
+	return ''
     endif
 
     let l:cnt = 1
