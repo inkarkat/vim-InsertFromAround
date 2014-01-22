@@ -35,8 +35,8 @@ RELATED WORKS								     *
 ==============================================================================
 USAGE						      *InsertFromAround-usage*
 
-							       *i_SHIFT-Enter*
-SHIFT-Enter		Insert carriage return and indent the new line to the
+								*i_CTRL-Enter*
+CTRL-Enter		Insert carriage return and indent the new line to the
 			current cursor column. This takes into account
 			indent-expressions and insertion of the comment leader.
 
