@@ -3,13 +3,13 @@
 " DEPENDENCIES:
 "   - ingo/compat.vim autoload script
 "
-" Copyright: (C) 2013 Ingo Karkat
+" Copyright: (C) 2013-2014 Ingo Karkat
 "   The VIM LICENSE applies to this script; see ':help copyright'.
 "
 " Maintainer:	Ingo Karkat <ingo@karkat.de>
 "
 " REVISION	DATE		REMARKS
-"	001	23-Apr-2013	file creation
+"   1.00.001	23-Apr-2013	file creation
 
 function! s:GetPreviousTextColumn( virtcol, isToNext )
     let l:lnum = ingo#folds#NextVisibleLine(line('.') - 1, -1)
@@ -38,6 +38,8 @@ function! s:GetPreviousTextColumn( virtcol, isToNext )
     return l:alignVirtCol
 endfunction
 function! InsertFromAround#Align#AlignToPrevious()
+    " For dedenting, we directly manipulate the line with setline(), and only
+    " possibly return typed characters to cause a beep.
     let l:currentVirtCol = virtcol('.')
     let l:alignVirtCol = s:GetPreviousTextColumn(l:currentVirtCol, 0)
     if l:alignVirtCol == -1
@@ -70,6 +72,9 @@ function! InsertFromAround#Align#AlignToPrevious()
     return ''
 endfunction
 function! InsertFromAround#Align#AlignToNext()
+    " Use i_CTRL-R to insert the indenting <Tab> characters as typed, so that
+    " the indent settings apply and the added whitespace is fused with preceding
+    " whitespace.
     let l:currentVirtCol = virtcol('.')
     let l:alignVirtCol = s:GetPreviousTextColumn(l:currentVirtCol, 1)
     if l:alignVirtCol == -1
