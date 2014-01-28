@@ -1,16 +1,19 @@
-" InsertFromAround.vim: Insert-mode mappings to fetch text or indent from surrounding lines.
+" InsertFromAround.vim: Insert mode mappings to fetch text or indent from surrounding lines.
 "
 " DEPENDENCIES:
+"   - InsertFromAround/Align.vim autoload script
 "   - InsertFromAround/Indent.vim autoload script
 "   - InsertFromAround/Newline.vim autoload script
 "   - InsertFromAround/Text.vim autoload script
 "
-" Copyright: (C) 2009-2013 Ingo Karkat
+" Copyright: (C) 2009-2014 Ingo Karkat
 "   The VIM LICENSE applies to this script; see ':help copyright'.
 "
 " Maintainer:	Ingo Karkat <ingo@karkat.de>
 "
 " REVISION	DATE		REMARKS
+"   1.00.004	23-Jan-2014	Define <Plug>-mappings for the remaining
+"				hard-coded mappings.
 "	003	02-Aug-2013	CHG: Remap <S-CR> to <C-CR>, as I need the
 "				<S-CR> imap for a mapping consistent with normal
 "				mode.
@@ -25,39 +28,49 @@ endif
 let g:loaded_InsertFromAround = 1
 
 inoremap <expr> <SID>(RecordColumn) InsertFromAround#Newline#RecordColumn()
-inoremap <silent> <script> <C-CR> <SID>(RecordColumn)$<Left><CR><Esc>:call InsertFromAround#Newline#Insert()<CR>
+inoremap <silent> <script> <Plug>(InsertFromEnterAndIndent) <SID>(RecordColumn)$<Left><CR><Esc>:call InsertFromAround#Newline#Insert()<CR>
 " This will repeat the <Enter> or just the text entered after the mapping (if
 " done) on "." in normal mode.
-
-" Now using toggling, see below.
-"inoremap <silent> <Plug>InsertFromBelow <C-r><C-r>=<SID>InsertFromAround(0,'.')<CR>
-"inoremap <silent> <Plug>InsertFromAbove <C-r><C-r>=<SID>InsertFromAround(1,'.')<CR>
-" Additionally overloaded with "Inline Completion" and moved to ingocompletion.vim.
-"imap <expr> <C-e> pumvisible() ? '<C-e>' : '<Plug>InsertFromBelow'
-"imap <expr> <C-y> pumvisible() ? '<C-y>' : '<Plug>InsertFromAbove'
-
-" Now using toggling, see below.
-"inoremap <silent> <C-g><C-e> <C-r><C-r>=<SID>InsertWordFromAround(0)<CR>
-"inoremap <silent> <C-g><C-y> <C-r><C-r>=<SID>InsertWordFromAround(1)<CR>
-
-inoremap <silent> <Plug>InsertFromBelow <C-r><C-r>=InsertFromAround#Text#Toggled(0,0)<CR>
-inoremap <silent> <Plug>InsertFromAbove <C-r><C-r>=InsertFromAround#Text#Toggled(1,0)<CR>
-inoremap <silent> <C-g><C-e> <C-r><C-r>=InsertFromAround#Text#Toggled(0,1)<CR>
-inoremap <silent> <C-g><C-y> <C-r><C-r>=InsertFromAround#Text#Toggled(1,1)<CR>
+if ! hasmapto('<Plug>(InsertFromEnterAndIndent)', 'i')
+    imap <C-CR> <Plug>(InsertFromEnterAndIndent)
+endif
 
 
 
-" Use i_CTRL-R_CTRL-O to insert the indent literally without auto-indenting.
-inoremap <silent> <C-g><C-u> <C-r><C-o>=InsertFromAround#Indent#Insert()<CR>
+inoremap <silent> <Plug>(InsertFromTextBelow) <C-r><C-r>=InsertFromAround#Text#Toggled(0,0)<CR>
+inoremap <silent> <Plug>(InsertFromTextAbove) <C-r><C-r>=InsertFromAround#Text#Toggled(1,0)<CR>
+if ! hasmapto('<Plug>(InsertFromTextBelow)', 'i')
+    imap <C-e> <Plug>(InsertFromTextBelow)
+endif
+if ! hasmapto('<Plug>(InsertFromTextAbove)', 'i')
+    imap <C-y> <Plug>(InsertFromTextAbove)
+endif
+
+inoremap <silent> <Plug>(InsertFromTextBelowToggle) <C-r><C-r>=InsertFromAround#Text#Toggled(0,1)<CR>
+inoremap <silent> <Plug>(InsertFromTextAboveToggle) <C-r><C-r>=InsertFromAround#Text#Toggled(1,1)<CR>
+if ! hasmapto('<Plug>(InsertFromTextBelowToggle)', 'i')
+    imap <C-g><C-e> <Plug>(InsertFromTextBelowToggle)
+endif
+if ! hasmapto('<Plug>(InsertFromTextAboveToggle)', 'i')
+    imap <C-g><C-y> <Plug>(InsertFromTextAboveToggle)
+endif
 
 
 
-" Use i_CTRL-R to insert the indenting <Tab> characters as typed, so that the
-" indent settings apply and the added whitespace is fused with preceding
-" whitespace.
-inoremap <silent> <C-g><C-d> <C-r>=InsertFromAround#Align#AlignToPrevious()<CR>
-" For dedenting, we directly manipulate the line with setline(), and only
-" possibly return typed characters to cause a beep.
-inoremap <silent> <C-g><C-t> <C-r>=InsertFromAround#Align#AlignToNext()<CR>
+inoremap <silent> <Plug>(InsertFromIndent) <C-r><C-o>=InsertFromAround#Indent#Insert()<CR>
+if ! hasmapto('<Plug>(InsertFromIndent)', 'i')
+    imap <C-g><C-u> <Plug>(InsertFromIndent)
+endif
+
+
+
+inoremap <silent> <Plug>(InsertFromAlignToPrevious) <C-r>=InsertFromAround#Align#AlignToPrevious()<CR>
+if ! hasmapto('<Plug>(InsertFromAlignToPrevious)', 'i')
+    imap <C-g><C-d> <Plug>(InsertFromAlignToPrevious)
+endif
+inoremap <silent> <Plug>(InsertFromAlignToNext) <C-r>=InsertFromAround#Align#AlignToNext()<CR>
+if ! hasmapto('<Plug>(InsertFromAlignToNext)', 'i')
+    imap <C-g><C-t> <Plug>(InsertFromAlignToNext)
+endif
 
 " vim: set ts=8 sts=4 sw=4 noexpandtab ff=unix fdm=syntax :
