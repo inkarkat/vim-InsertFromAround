@@ -13,6 +13,43 @@
 "				closer lines are shorter than the cursor column.
 "   1.00.001	23-Apr-2013	file creation
 
+function! s:AlignToNext( TargetColumnFuncref, ... )
+    " Use i_CTRL-R to insert the indenting <Tab> characters as typed, so that
+    " the indent settings apply and the added whitespace is fused with preceding
+    " whitespace.
+    let l:currentVirtCol = virtcol('.')
+    let l:alignVirtCol = call(a:TargetColumnFuncref, [l:currentVirtCol] + a:000)
+    if l:alignVirtCol == -1
+	return "\<C-\>\<C-o>\<Esc>" " Beep.
+    endif
+
+    let l:insertColumns = l:alignVirtCol - l:currentVirtCol
+"****D echomsg '**** align' l:currentVirtCol 'to' l:alignVirtCol ':' l:insertColumns
+    return s:RenderColumns(l:currentVirtCol, l:insertColumns)
+endfunction
+function! s:RenderColumns( virtcol, columnNum )
+    if &expandtab
+	return repeat(' ', a:columnNum)
+    endif
+
+    let l:tabWidth = (&softtabstop > 0 ? &softtabstop : &tabstop)
+    let l:renderedColumns = ''
+    let l:renderedColumnCnt = 0
+    let l:tabColumns = l:tabWidth - (a:virtcol - 1) % l:tabWidth
+    if l:tabColumns <= a:columnNum
+	let l:renderedColumns .= "\t"
+	let l:renderedColumnCnt += l:tabColumns
+    endif
+
+    let l:fullTabNum = (a:columnNum - l:renderedColumnCnt) / l:tabWidth
+    let l:renderedColumns .= repeat("\t", l:fullTabNum)
+    let l:renderedColumnCnt += l:tabWidth * l:fullTabNum
+
+    let l:renderedColumns .= repeat(' ', a:columnNum - l:renderedColumnCnt)
+
+    return l:renderedColumns
+endfunction
+
 function! s:GetPreviousTextColumn( virtcol, isToNext )
     if a:isToNext
 	let l:startOfTextExpr  = '^.\{-}\%>' . (a:virtcol - 1) . 'v\S*\s\+\S'
@@ -50,6 +87,8 @@ function! s:GetPreviousTextColumn( virtcol, isToNext )
 
     return -1   " No match in any preceding line.
 endfunction
+
+
 function! InsertFromAround#Align#ToPrevious()
     " For dedenting, we directly manipulate the line with setline(), and only
     " possibly return typed characters to cause a beep.
@@ -85,41 +124,40 @@ function! InsertFromAround#Align#ToPrevious()
     return ''
 endfunction
 function! InsertFromAround#Align#ToNext()
-    " Use i_CTRL-R to insert the indenting <Tab> characters as typed, so that
-    " the indent settings apply and the added whitespace is fused with preceding
-    " whitespace.
-    let l:currentVirtCol = virtcol('.')
-    let l:alignVirtCol = s:GetPreviousTextColumn(l:currentVirtCol, 1)
-    if l:alignVirtCol == -1
-	return "\<C-\>\<C-o>\<Esc>" " Beep.
-    endif
-
-    let l:insertColumns = l:alignVirtCol - l:currentVirtCol
-"****D echomsg '**** align' l:currentVirtCol 'to' l:alignVirtCol ':' l:insertColumns
-    return s:RenderColumns(l:currentVirtCol, l:insertColumns)
+    return s:AlignToNext(function('s:GetPreviousTextColumn'), 1)
 endfunction
 
-function! s:RenderColumns( virtcol, columnNum )
-    if &expandtab
-	return repeat(' ', a:columnNum)
+function! s:GetClosestCharTextColumn( virtcol, char )
+    let l:startOfCharExpr = '\V\C\^\.\{-}\%>'  . a:virtcol . 'v' . escape(a:char, '\')
+    let l:prevLnum = line('.')
+    let l:nextLnum = line('.')
+    while l:prevLnum > 1 || l:nextLnum < line('$') && l:nextLnum != -1
+	let l:prevLnum = ingo#folds#NextVisibleLine(l:prevLnum - 1, -1)
+	let l:nextLnum = ingo#folds#NextVisibleLine(l:nextLnum + 1, +1)
+
+	let l:prevText = (l:prevLnum == -1 ? '' : matchstr(getline(l:prevLnum), l:startOfCharExpr))
+	let l:nextText = (l:nextLnum == -1 ? '' : matchstr(getline(l:nextLnum), l:startOfCharExpr))
+
+	let l:prevVirtCol = (empty(l:prevText) ? 0x7FFFFFFF : ingo#compat#strdisplaywidth(l:prevText))
+	let l:nextVirtCol = (empty(l:nextText) ? 0x7FFFFFFF : ingo#compat#strdisplaywidth(l:nextText))
+
+	let l:closestVirtCol = min([l:prevVirtCol, l:nextVirtCol])
+"****D echomsg '****' string(l:startOfCharExpr) string(l:prevText) string(l:nextText) l:prevVirtCol l:nextVirtCol
+	if l:closestVirtCol < 0x7FFFFFFF
+	    return l:closestVirtCol " We've found a matching character; return its screen column.
+	endif
+	" Continue searching in surrounding lines farther away.
+    endwhile
+
+    return -1   " No match in any surrounding line.
+endfunction
+function! InsertFromAround#Align#ToCurrentChar()
+    let l:char = matchstr(getline('.'), '\%>' . (col('.') - 1) . 'c\S')
+    if empty(l:char)
+	" No non-whitespace character after the cursor.
+	return "\<C-\>\<C-o>\<Esc>" " Beep.
     endif
-
-    let l:tabWidth = (&softtabstop > 0 ? &softtabstop : &tabstop)
-    let l:renderedColumns = ''
-    let l:renderedColumnCnt = 0
-    let l:tabColumns = l:tabWidth - (a:virtcol - 1) % l:tabWidth
-    if l:tabColumns <= a:columnNum
-	let l:renderedColumns .= "\t"
-	let l:renderedColumnCnt += l:tabColumns
-    endif
-
-    let l:fullTabNum = (a:columnNum - l:renderedColumnCnt) / l:tabWidth
-    let l:renderedColumns .= repeat("\t", l:fullTabNum)
-    let l:renderedColumnCnt += l:tabWidth * l:fullTabNum
-
-    let l:renderedColumns .= repeat(' ', a:columnNum - l:renderedColumnCnt)
-
-    return l:renderedColumns
+    return s:AlignToNext(function('s:GetClosestCharTextColumn'), l:char)
 endfunction
 
 " vim: set ts=8 sts=4 sw=4 noexpandtab ff=unix fdm=syntax :
