@@ -84,7 +84,8 @@ CTRL-G CTRL-D		Remove whitespace before the cursor so that the
 							     *i_CTRL-G_CTRL-T*
 CTRL-G CTRL-T		Insert whitespace so that the text after the cursor
 			aligns with the start of following non-whitespace text
-			in the previous unfolded line.
+			(and the end of the text) in the previous unfolded
+			line.
 
 EXAMPLE						    *InsertFromAround-example*
 
@@ -176,6 +177,11 @@ IDEAS						      *InsertFromAround-ideas*
 
 ==============================================================================
 HISTORY						    *InsertFromAround-history*
+
+1.10	RELEASEME
+- ENH: The i_CTRL-G_CTRL-D / i_CTRL-G_CTRL-T mappings also align to
+  non-whitespace text in preceding lines when the line immediately above is
+  shorter than the cursor column.
 
 1.00	23-Jan-2014
 First published version.
