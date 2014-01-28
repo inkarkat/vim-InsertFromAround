@@ -1,4 +1,4 @@
-*InsertFromAround.txt*  Insert-mode mappings to fetch text or indent from surrounding lines.
+*InsertFromAround.txt*  Insert mode mappings to fetch text or indent from surrounding lines.
 
 		     INSERT FROM AROUND    by Ingo Karkat
 							*InsertFromAround.vim*
@@ -6,7 +6,6 @@ description			|InsertFromAround-description|
 usage				|InsertFromAround-usage|
 installation			|InsertFromAround-installation|
 configuration			|InsertFromAround-configuration|
-integration			|InsertFromAround-integration|
 limitations			|InsertFromAround-limitations|
 known problems			|InsertFromAround-known-problems|
 todo				|InsertFromAround-todo|
@@ -15,17 +14,29 @@ history				|InsertFromAround-history|
 ==============================================================================
 DESCRIPTION					*InsertFromAround-description*
 
-This plugin ...
+With the proper indent settings, Vim will mostly supply the correct amount of
+indent when creating new lines. But sometimes, one needs a special amount of
+indent, and it is cumbersome to manually create that by repeatedly pressing
+<Tab>, <Space>, and <BS>.
 
-HOW IT WORKS								     *
+This plugin defines insert mode mappings that indent a new line exactly at the
+current cursor position, or insert the indent used in adjacent lines, or align
+the text to the right of the cursor to text fragments in surrounding lines.
+
+To duplicate the text of adjacent lines, Vim has the |i_CTRL-E| / |i_CTRL-Y|
+commands. But these only work character for character (which makes it slow to
+copy longer fragments), and fail when empty / shorter lines surround the
+current line.
+
+This plugin supercharges these commands, making them look beyond the immediate
+lines. With a separate mapping, the scope of completion can be toggled between
+single characters and whole words, speeding up larger text grabs while still
+allowing the fine-grained completion.
 
 SOURCE									     *
 
 - The i_CTRL-E / i_CTRL-Y mappings are based on
-    http://www.ibm.com/developerworks/linux/library/l-vim-script-1/index.html?ca=drs-
-
-SEE ALSO								     *
-(Plugins offering complementary functionality, or plugins using this library.)
+    http://www.ibm.com/developerworks/linux/library/l-vim-script-1/index.html
 
 RELATED WORKS								     *
 
@@ -36,44 +47,89 @@ RELATED WORKS								     *
 USAGE						      *InsertFromAround-usage*
 
 								*i_CTRL-Enter*
-CTRL-Enter		Insert carriage return and indent the new line to the
-			current cursor column. This takes into account
-			indent-expressions and insertion of the comment leader.
+CTRL-Enter		Insert newline and indent the new line to the current
+			cursor column. This takes into account indent-
+			expressions and insertion of the comment leader.
 
 
 							 *i_CTRL-E* *i_CTRL-Y*
-CTRL-E / CTRL-Y		Insert the character from visible lines below / above
-			the cursor; if the adjacent line is not that long, look
-			beyond. The command beeps and suspends insert once if
-			the current target line has been exhausted.
+CTRL-E / CTRL-Y		Insert the character from unfolded lines below / above
+			the cursor; if the adjacent line is not that long,
+			look beyond. The command beeps and suspends insert
+			once if the current target line has been exhausted.
 					   *i_CTRL-G_CTRL-E* *i_CTRL-G_CTRL-Y*
 CTRL-G CTRL-E / CTRL-G CTRL-Y
-			Insert an entire word from visible lines below / above
-			the cursor and toggle the behavior of |i_CTRL-E| /
-			|i_CTRL-Y| to continue inserting words. The behavior
+			Insert an entire word from unfolded lines below /
+			above the cursor and toggle the behavior of |i_CTRL-E|
+			/ |i_CTRL-Y| to continue inserting words. The behavior
 			reverts itself when inserting in another line or by
 			using this mapping a second time.
 
+
 							     *i_CTRL-G_CTRL-U*
-CTRL-G CTRL-U		Insert the indent from the next nearby visible line that
-			has at least as much indent as the current cursor
-			position. If the visible indent before and after the
-			current line differs, the smaller amount is inserted;
-			repeat the mapping to get the larger amount.
+CTRL-G CTRL-U		Replace the text before the cursor with the indent
+			from the next nearby unfolded line that has at least
+			as much indent as the current cursor position. If the
+			indent before and after the current line differs, the
+			smaller amount is inserted; repeat the mapping to get
+			the larger amount.
 			(Mnemonic: Undo the effect of |i_CTRL-U|.)
 
 
 							     *i_CTRL-G_CTRL-D*
 CTRL-G CTRL-D		Remove whitespace before the cursor so that the
 			current cursor position aligns with the start of
-			preceding non-whitespace text in the previous visible
+			preceding non-whitespace text in the previous unfolded
 			line.
 							     *i_CTRL-G_CTRL-T*
 CTRL-G CTRL-T		Insert whitespace so that the text after the cursor
 			aligns with the start of following non-whitespace text
-			in the previous visible line.
+			in the previous unfolded line.
 
 EXAMPLE						    *InsertFromAround-example*
+
+Insert newline and indent to cursor column:
+foo|ar ~
+    v CTRL-Enter
+foo ~
+    bar ~
+
+
+Insert the character, character, then word, word from above.
+A very long example provides context. ~
+Short one. ~
+    I'm here|~
+	    v CTRL-Y
+    I'm heree| ~
+	    v CTRL-Y
+    I'm hereex| ~
+	    v CTRL-G CTRL-Y
+    I'm hereexample| ~
+	    v CTRL-Y
+    I'm hereexample provides| ~
+
+
+Insert the additional indent from next nearby lines.
+    FOO            BAR        BAZ~
+           HI ~
+|ere ~
+v CTRL-G CTRL-U
+    |ere ~
+    v CTRL-G CTRL-U
+           |ere ~
+
+
+Align with the start of preceding text fragments.
+    FOO            BAR        BAZ~
+|ere ~
+v CTRL-G CTRL-T
+    |ere ~
+    v CTRL-G CTRL-T
+                   |ere ~
+                   v CTRL-G CTRL-T
+                              |ere ~
+                              v CTRL-G CTRL-D
+                   |ere ~
 
 ==============================================================================
 INSTALLATION				       *InsertFromAround-installation*
@@ -96,13 +152,19 @@ DEPENDENCIES				       *InsertFromAround-dependencies*
 CONFIGURATION				      *InsertFromAround-configuration*
 
 For a permanent configuration, put the following commands into your |vimrc|:
-configvar
 						      *InsertFromAround-remap*
-plugmap
-
-==============================================================================
-INTEGRATION					*InsertFromAround-integration*
-
+If you want to use different mappings, map your keys to the
+<Plug>(InsertFrom...) mapping targets _before_ sourcing the script
+(e.g. in your |vimrc|): >
+    imap <C-CR> <Plug>(InsertFromEnterAndIndent)
+    imap <C-e> <Plug>(InsertFromTextBelow)
+    imap <C-y> <Plug>(InsertFromTextAbove)
+    imap <C-g><C-e> <Plug>(InsertFromTextBelowToggle)
+    imap <C-g><C-y> <Plug>(InsertFromTextAboveToggle)
+    imap <C-g><C-u> <Plug>(InsertFromIndent)
+    imap <C-g><C-d> <Plug>(InsertFromAlignToPrevious)
+    imap <C-g><C-t> <Plug>(InsertFromAlignToNext)
+<
 ==============================================================================
 LIMITATIONS					*InsertFromAround-limitations*
 
@@ -115,7 +177,7 @@ IDEAS						      *InsertFromAround-ideas*
 ==============================================================================
 HISTORY						    *InsertFromAround-history*
 
-GOAL
+1.00	23-Jan-2014
 First published version.
 
 0.90	14-Apr-2013
@@ -125,7 +187,7 @@ Separated into independent plugin.
 Started development.
 
 ==============================================================================
-Copyright: (C) 2009-2013 Ingo Karkat
+Copyright: (C) 2009-2014 Ingo Karkat
 The VIM LICENSE applies to this plugin; see |copyright|.
 
 Maintainer:	Ingo Karkat <ingo@karkat.de>
