@@ -11,6 +11,10 @@
 " REVISION	DATE		REMARKS
 "   1.10.002	29-Jan-2014	ENH: Also consider previous lines when the
 "				closer lines are shorter than the cursor column.
+"				Factor out s:AlignToNext().
+"				Implement alignment to current character via
+"				InsertFromAround#Align#ToCurrentChar() and
+"				s:GetClosestCharTextColumn().
 "   1.00.001	23-Apr-2013	file creation
 
 function! s:AlignToNext( TargetColumnFuncref, ... )
@@ -71,16 +75,14 @@ function! s:GetPreviousTextColumn( virtcol, isToNext )
 		" the end of the previous line.
 		let l:text = getline(l:lnum) . ' '
 	    else
-		" No match in this line; try preceding line(s).
-		continue
+		continue    " No match in this line; try preceding line(s).
 	    endif
 	endif
 "****D echomsg '****' string(l:startOfTextExpr) string(l:text)
 	let l:alignVirtCol = ingo#compat#strdisplaywidth(l:text)
 
 	if a:isToNext && l:alignVirtCol <= a:virtcol
-	    " Too short; try preceding line(s).
-	    continue
+	    continue    " Too short; try preceding line(s).
 	endif
 	return l:alignVirtCol
     endwhile
@@ -127,29 +129,35 @@ function! InsertFromAround#Align#ToNext()
     return s:AlignToNext(function('s:GetPreviousTextColumn'), 1)
 endfunction
 
-function! s:GetClosestCharTextColumn( virtcol, char )
-    let l:startOfCharExpr = '\V\C\^\.\{-}\%>'  . a:virtcol . 'v' . escape(a:char, '\')
-    let l:prevLnum = line('.')
-    let l:nextLnum = line('.')
-    while l:prevLnum > 1 || l:nextLnum < line('$') && l:nextLnum != -1
-	let l:prevLnum = ingo#folds#NextVisibleLine(l:prevLnum - 1, -1)
-	let l:nextLnum = ingo#folds#NextVisibleLine(l:nextLnum + 1, +1)
-
-	let l:prevText = (l:prevLnum == -1 ? '' : matchstr(getline(l:prevLnum), l:startOfCharExpr))
-	let l:nextText = (l:nextLnum == -1 ? '' : matchstr(getline(l:nextLnum), l:startOfCharExpr))
-
-	let l:prevVirtCol = (empty(l:prevText) ? 0x7FFFFFFF : ingo#compat#strdisplaywidth(l:prevText))
-	let l:nextVirtCol = (empty(l:nextText) ? 0x7FFFFFFF : ingo#compat#strdisplaywidth(l:nextText))
-
-	let l:closestVirtCol = min([l:prevVirtCol, l:nextVirtCol])
-"****D echomsg '****' string(l:startOfCharExpr) string(l:prevText) string(l:nextText) l:prevVirtCol l:nextVirtCol
-	if l:closestVirtCol < 0x7FFFFFFF
-	    return l:closestVirtCol " We've found a matching character; return its screen column.
+function! s:FindClosestColumn( virtcol, expr, direction )
+    let l:lnum = line('.')
+    while l:lnum > 1 && l:lnum < line('$')
+	let l:lnum = ingo#folds#NextVisibleLine(l:lnum + a:direction, a:direction)
+	if l:lnum == -1
+	    return -1
 	endif
-	" Continue searching in surrounding lines farther away.
+
+	let l:text = matchstr(getline(l:lnum), a:expr)
+	if empty(l:text)
+	    continue    " No match in this line; try preceding line(s).
+	endif
+
+	let l:alignVirtCol = ingo#compat#strdisplaywidth(l:text)
+	if l:alignVirtCol <= a:virtcol
+	    continue    " Too short; try preceding line(s).
+	endif
+	return l:alignVirtCol
     endwhile
 
-    return -1   " No match in any surrounding line.
+    return -1   " No match in any preceding line.
+endfunction
+function! s:GetClosestCharTextColumn( virtcol, char )
+    let l:startOfCharExpr = '\V\C\^\.\{-}\%>'  . a:virtcol . 'v' . escape(a:char, '\')
+    let l:prevVirtCol = s:FindClosestColumn(a:virtcol, l:startOfCharExpr, -1)
+    let l:nextVirtCol = s:FindClosestColumn(a:virtcol, l:startOfCharExpr, +1)
+
+    let l:closestVirtCol = min(filter([l:prevVirtCol, l:nextVirtCol], 'v:val != -1'))
+    return (l:closestVirtCol > 0 ? l:closestVirtCol : -1)
 endfunction
 function! InsertFromAround#Align#ToCurrentChar()
     let l:char = matchstr(getline('.'), '\%>' . (col('.') - 1) . 'c\S')
