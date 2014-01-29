@@ -87,6 +87,12 @@ CTRL-G CTRL-T		Insert whitespace so that the text after the cursor
 			(and the end of the text) in the previous unfolded
 			line.
 
+							     *i_CTRL-G_CTRL-V*
+CTRL-G CTRL-V		Insert whitespace so that the text after the cursor
+			aligns with the closest match of the (non-whitespace)
+			character after the cursor found after the cursor
+			column in adjacent unfolded lines.
+
 EXAMPLE						    *InsertFromAround-example*
 
 Insert newline and indent to cursor column:
@@ -131,6 +137,17 @@ v CTRL-G CTRL-T
                               |ere ~
                               v CTRL-G CTRL-D
                    |ere ~
+
+Align "Nothing" with the closest match of the character "N" found nearby.
+    NOO            BAR        NAZ~
+           NI ~
+|othing ~
+v CTRL-G CTRL-U
+    |othing ~
+    v CTRL-G CTRL-U
+           |othing ~
+           v CTRL-G CTRL-U
+                              |othing ~
 
 ==============================================================================
 INSTALLATION				       *InsertFromAround-installation*
@@ -182,6 +199,8 @@ HISTORY						    *InsertFromAround-history*
 - ENH: The i_CTRL-G_CTRL-D / i_CTRL-G_CTRL-T mappings also align to
   non-whitespace text in preceding lines when the line immediately above is
   shorter than the cursor column.
+- Add CTRL-G CTRL-V mapping that aligns to the current character found in
+  adjacent lines.
 
 1.00	23-Jan-2014
 First published version.
