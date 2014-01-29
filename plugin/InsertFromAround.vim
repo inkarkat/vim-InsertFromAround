@@ -12,6 +12,8 @@
 " Maintainer:	Ingo Karkat <ingo@karkat.de>
 "
 " REVISION	DATE		REMARKS
+"   1.10.005	29-Jan-2014	Implement <C-g><C-v> mapping that aligns to the
+"				current character found in adjacent lines.
 "   1.00.004	23-Jan-2014	Define <Plug>-mappings for the remaining
 "				hard-coded mappings.
 "	003	02-Aug-2013	CHG: Remap <S-CR> to <C-CR>, as I need the
@@ -64,13 +66,19 @@ endif
 
 
 
-inoremap <silent> <Plug>(InsertFromAlignToPrevious) <C-r>=InsertFromAround#Align#AlignToPrevious()<CR>
+inoremap <silent> <Plug>(InsertFromAlignToPrevious) <C-r>=InsertFromAround#Align#ToPrevious()<CR>
 if ! hasmapto('<Plug>(InsertFromAlignToPrevious)', 'i')
     imap <C-g><C-d> <Plug>(InsertFromAlignToPrevious)
 endif
-inoremap <silent> <Plug>(InsertFromAlignToNext) <C-r>=InsertFromAround#Align#AlignToNext()<CR>
+inoremap <silent> <Plug>(InsertFromAlignToNext) <C-r>=InsertFromAround#Align#ToNext()<CR>
 if ! hasmapto('<Plug>(InsertFromAlignToNext)', 'i')
     imap <C-g><C-t> <Plug>(InsertFromAlignToNext)
 endif
+
+inoremap <silent> <Plug>(InsertFromAlignToCurrentChar) <C-r>=InsertFromAround#Align#ToCurrentChar()<CR>
+if ! hasmapto('<Plug>(InsertFromAlignToCurrentChar)', 'i')
+    imap <C-g><C-v> <Plug>(InsertFromAlignToCurrentChar)
+endif
+
 
 " vim: set ts=8 sts=4 sw=4 noexpandtab ff=unix fdm=syntax :
