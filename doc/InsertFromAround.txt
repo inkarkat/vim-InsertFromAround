@@ -93,6 +93,15 @@ CTRL-G CTRL-V		Insert whitespace so that the text after the cursor
 			character after the cursor found after the cursor
 			column in adjacent unfolded lines.
 
+								  *i_CTRL-G_V*
+CTRL-G V{char}		Insert whitespace so that the text after the cursor
+			aligns the next match of {char} in the current line
+			with the closest match of {char} found after that
+			column in adjacent unfolded lines.
+			Note: This won't work correctly when there are <Tab>
+			characters between the cursor and the next match of
+			{char}.
+
 EXAMPLE						    *InsertFromAround-example*
 
 Insert newline and indent to cursor column:
@@ -149,6 +158,14 @@ v CTRL-G CTRL-U
            v CTRL-G CTRL-U
                               |othing ~
 
+Align on = with the closest match found nearby.
+    class="bar" alt="ni" ~
+|ummary="foo" ~
+v CTRL-G V =
+  |ummary="foo" ~
+    v CTRL-G CTRL-U
+            |ummary="foo" ~
+
 ==============================================================================
 INSTALLATION				       *InsertFromAround-installation*
 
@@ -201,6 +218,7 @@ HISTORY						    *InsertFromAround-history*
   shorter than the cursor column.
 - Add CTRL-G CTRL-V mapping that aligns to the current character found in
   adjacent lines.
+- Add CTRL-G V{char} mapping that aligns to the queried character.
 
 1.00	23-Jan-2014
 First published version.
