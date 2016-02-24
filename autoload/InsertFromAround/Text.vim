@@ -10,7 +10,7 @@
 " Maintainer:	Ingo Karkat <ingo@karkat.de>
 "
 " REVISION	DATE		REMARKS
-"	001	14-Apr-2013	file creation from ingomappings.vim
+"   1.00.001	14-Apr-2013	file creation from ingomappings.vim
 
 function! s:TextFromAround( isAbove, insertPattern )
     " Locate a surrounding visible (i.e. not folded) line which is long enough
