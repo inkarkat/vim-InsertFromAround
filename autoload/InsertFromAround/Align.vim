@@ -2,6 +2,7 @@
 "
 " DEPENDENCIES:
 "   - ingo/compat.vim autoload script
+"   - ingo/query/get.vim autoload script
 "
 " Copyright: (C) 2013-2014 Ingo Karkat
 "   The VIM LICENSE applies to this script; see ':help copyright'.
@@ -9,6 +10,11 @@
 " Maintainer:	Ingo Karkat <ingo@karkat.de>
 "
 " REVISION	DATE		REMARKS
+"   1.10.003	30-Jan-2014	Implement alignment to queried character.
+"				FIX: Buffer bounds check in
+"				s:FindClosestColumn() needs to consider the
+"				a:direction, or it won't work when the current
+"				line is at the opposite side.
 "   1.10.002	29-Jan-2014	ENH: Also consider previous lines when the
 "				closer lines are shorter than the cursor column.
 "				Factor out s:AlignToNext().
@@ -17,19 +23,18 @@
 "				s:GetClosestCharTextColumn().
 "   1.00.001	23-Apr-2013	file creation
 
-function! s:AlignToNext( TargetColumnFuncref, ... )
+function! s:AlignToNext( baseVirtCol, TargetColumnFuncref, ... )
     " Use i_CTRL-R to insert the indenting <Tab> characters as typed, so that
     " the indent settings apply and the added whitespace is fused with preceding
     " whitespace.
-    let l:currentVirtCol = virtcol('.')
-    let l:alignVirtCol = call(a:TargetColumnFuncref, [l:currentVirtCol] + a:000)
+    let l:alignVirtCol = call(a:TargetColumnFuncref, [a:baseVirtCol] + a:000)
     if l:alignVirtCol == -1
 	return "\<C-\>\<C-o>\<Esc>" " Beep.
     endif
 
-    let l:insertColumns = l:alignVirtCol - l:currentVirtCol
-"****D echomsg '**** align' l:currentVirtCol 'to' l:alignVirtCol ':' l:insertColumns
-    return s:RenderColumns(l:currentVirtCol, l:insertColumns)
+    let l:insertColumns = l:alignVirtCol - a:baseVirtCol
+"****D echomsg '**** align' a:baseVirtCol 'to' l:alignVirtCol ':' l:insertColumns
+    return s:RenderColumns(virtcol('.'), l:insertColumns)
 endfunction
 function! s:RenderColumns( virtcol, columnNum )
     if &expandtab
@@ -126,12 +131,12 @@ function! InsertFromAround#Align#ToPrevious()
     return ''
 endfunction
 function! InsertFromAround#Align#ToNext()
-    return s:AlignToNext(function('s:GetPreviousTextColumn'), 1)
+    return s:AlignToNext(virtcol('.'), function('s:GetPreviousTextColumn'), 1)
 endfunction
 
 function! s:FindClosestColumn( virtcol, expr, direction )
     let l:lnum = line('.')
-    while l:lnum > 1 && l:lnum < line('$')
+    while a:direction == -1 && l:lnum > 1 || a:direction == 1 && l:lnum < line('$')
 	let l:lnum = ingo#folds#NextVisibleLine(l:lnum + a:direction, a:direction)
 	if l:lnum == -1
 	    return -1
@@ -165,7 +170,21 @@ function! InsertFromAround#Align#ToCurrentChar()
 	" No non-whitespace character after the cursor.
 	return "\<C-\>\<C-o>\<Esc>" " Beep.
     endif
-    return s:AlignToNext(function('s:GetClosestCharTextColumn'), l:char)
+    return s:AlignToNext(virtcol('.'), function('s:GetClosestCharTextColumn'), l:char)
+endfunction
+
+function! InsertFromAround#Align#ToQueriedChar()
+    let l:char = ingo#query#get#Char()
+    if empty(l:char) | return '' | endif
+
+    let l:baseCol = searchpos('\V\C' . escape(l:char, '\'), 'nW', line('.'))[1]
+    if l:baseCol == 0
+	" No match of the queried character after the cursor.
+	return "\<C-\>\<C-o>\<Esc>" " Beep.
+    endif
+
+    let l:baseVirtCol = ingo#compat#strdisplaywidth(strpart(getline('.'), 0, l:baseCol - 1)) + 1 " Do not include the searched character in the width calculation, and instead add one. This gives the correct start column when the matched character has a width of multiple screen cells.
+    return s:AlignToNext(l:baseVirtCol, function('s:GetClosestCharTextColumn'), l:char)
 endfunction
 
 " vim: set ts=8 sts=4 sw=4 noexpandtab ff=unix fdm=syntax :
