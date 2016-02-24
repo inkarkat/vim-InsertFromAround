@@ -1,0 +1,7 @@
+autoload/InsertFromAround.vim
+autoload/InsertFromAround/Align.vim
+autoload/InsertFromAround/Indent.vim
+autoload/InsertFromAround/Newline.vim
+autoload/InsertFromAround/Text.vim
+plugin/InsertFromAround.vim
+doc/InsertFromAround.txt
