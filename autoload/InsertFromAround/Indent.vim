@@ -10,7 +10,7 @@
 " Maintainer:	Ingo Karkat <ingo@karkat.de>
 "
 " REVISION	DATE		REMARKS
-"	002	07-May-2013	When there's only whitespace before the cursor,
+"   1.00.002	07-May-2013	When there's only whitespace before the cursor,
 "				replace it with the indent; instead of returning
 "				the delta whitespace, this also correctly
 "				handles the case when a <Tab> is appended to
