@@ -8,7 +8,7 @@
 " Maintainer:	Ingo Karkat <ingo@karkat.de>
 "
 " REVISION	DATE		REMARKS
-"	001	14-Apr-2013	file creation from ingomappings.vim
+"   1.00.001	14-Apr-2013	file creation from ingomappings.vim
 
 function! InsertFromAround#Newline#RecordColumn()
     let s:previousCol = virtcol('.')
