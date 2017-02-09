@@ -212,7 +212,7 @@ IDEAS						      *InsertFromAround-ideas*
 ==============================================================================
 HISTORY						    *InsertFromAround-history*
 
-1.10	RELEASEME
+1.10	03-Apr-2014
 - ENH: The i_CTRL-G_CTRL-D / i_CTRL-G_CTRL-T mappings also align to
   non-whitespace text in preceding lines when the line immediately above is
   shorter than the cursor column.
