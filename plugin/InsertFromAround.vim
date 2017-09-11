@@ -79,6 +79,10 @@ inoremap <silent> <Plug>(InsertFromAlignToCurrentChar) <C-r>=InsertFromAround#Al
 if ! hasmapto('<Plug>(InsertFromAlignToCurrentChar)', 'i')
     imap <C-g><C-v> <Plug>(InsertFromAlignToCurrentChar)
 endif
+inoremap <silent> <Plug>(InsertFromAlignToQueriedChar) <C-r>=InsertFromAround#Align#ToQueriedChar()<CR>
+if ! hasmapto('<Plug>(InsertFromAlignToQueriedChar)', 'i')
+    imap <C-g>V <Plug>(InsertFromAlignToQueriedChar)
+endif
 
 
 " vim: set ts=8 sts=4 sw=4 noexpandtab ff=unix fdm=syntax :
