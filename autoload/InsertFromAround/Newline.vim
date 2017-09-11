@@ -2,12 +2,13 @@
 "
 " DEPENDENCIES:
 "
-" Copyright: (C) 2009-2013 Ingo Karkat
+" Copyright: (C) 2009-2017 Ingo Karkat
 "   The VIM LICENSE applies to this script; see ':help copyright'.
 "
 " Maintainer:	Ingo Karkat <ingo@karkat.de>
 "
 " REVISION	DATE		REMARKS
+"   1.11.002	10-Feb-2017	Use ingo#cursor#StartInsert().
 "   1.00.001	14-Apr-2013	file creation from ingomappings.vim
 
 function! InsertFromAround#Newline#RecordColumn()
@@ -32,11 +33,7 @@ function! InsertFromAround#Newline#Insert()
     endif
     normal! "_x
 "****D echomsg '****' s:isAtEndOfLine l:isIndentInNewLine l:indentCols
-    if s:isAtEndOfLine
-	startinsert!
-    else
-	startinsert
-    endif
+    call ingo#cursor#StartInsert(s:isAtEndOfLine)
 endfunction
 
 " vim: set ts=8 sts=4 sw=4 noexpandtab ff=unix fdm=syntax :
