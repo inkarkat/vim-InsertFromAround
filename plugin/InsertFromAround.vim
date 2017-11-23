@@ -12,6 +12,12 @@
 " Maintainer:	Ingo Karkat <ingo@karkat.de>
 "
 " REVISION	DATE		REMARKS
+"   1.11.007	24-Nov-2017	CHG: Rename i_CTRL-G_CTRL-D / i_CTRL-G_CTRL-T
+"				default mappings to i_CTRL-G_CTRL-B ("before") /
+"				i_CTRL-G_CTRL-A ("after"). I need the original
+"				mappings to toggle i_CTRL-D / i_CTRL-T in my
+"				IndentCommentPrefix.vim plugin for toggling
+"				similar to i_CTRL-G_CTRL-E here.
 "   1.11.006	12-Sep-2017	Make <C-CR> handle comment prefixes, not just
 "				indent. To correctly recognize a
 "				single-character prefix (#, or Vimscript's "),
@@ -75,11 +81,11 @@ endif
 
 inoremap <silent> <Plug>(InsertFromAlignToPrevious) <C-r>=InsertFromAround#Align#ToPrevious()<CR>
 if ! hasmapto('<Plug>(InsertFromAlignToPrevious)', 'i')
-    imap <C-g><C-d> <Plug>(InsertFromAlignToPrevious)
+    imap <C-g><C-b> <Plug>(InsertFromAlignToPrevious)
 endif
 inoremap <silent> <Plug>(InsertFromAlignToNext) <C-r>=InsertFromAround#Align#ToNext()<CR>
 if ! hasmapto('<Plug>(InsertFromAlignToNext)', 'i')
-    imap <C-g><C-t> <Plug>(InsertFromAlignToNext)
+    imap <C-g><C-a> <Plug>(InsertFromAlignToNext)
 endif
 
 inoremap <silent> <Plug>(InsertFromAlignToCurrentChar) <C-r>=InsertFromAround#Align#ToCurrentChar()<CR>
