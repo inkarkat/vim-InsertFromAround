@@ -6,12 +6,18 @@
 "   - InsertFromAround/Newline.vim autoload script
 "   - InsertFromAround/Text.vim autoload script
 "
-" Copyright: (C) 2009-2014 Ingo Karkat
+" Copyright: (C) 2009-2017 Ingo Karkat
 "   The VIM LICENSE applies to this script; see ':help copyright'.
 "
 " Maintainer:	Ingo Karkat <ingo@karkat.de>
 "
 " REVISION	DATE		REMARKS
+"   1.11.006	12-Sep-2017	Make <C-CR> handle comment prefixes, not just
+"				indent. To correctly recognize a
+"				single-character prefix (#, or Vimscript's "),
+"				we need to also record the column after pressing
+"				<Enter>, as the following <Esc> will move the
+"				cursor left and obscure the character.
 "   1.10.005	29-Jan-2014	Implement <C-g><C-v> mapping that aligns to the
 "				current character found in adjacent lines.
 "   1.00.004	23-Jan-2014	Define <Plug>-mappings for the remaining
@@ -29,8 +35,9 @@ if exists('g:loaded_InsertFromAround') || (v:version < 700)
 endif
 let g:loaded_InsertFromAround = 1
 
-inoremap <expr> <SID>(RecordColumn) InsertFromAround#Newline#RecordColumn()
-inoremap <silent> <script> <Plug>(InsertFromEnterAndIndent) <SID>(RecordColumn)$<Left><CR><Esc>:call InsertFromAround#Newline#Insert()<CR>
+inoremap <expr> <SID>(RecordPreviousColumn) InsertFromAround#Newline#RecordPreviousColumn()
+inoremap <expr> <SID>(RecordNewColumn) InsertFromAround#Newline#RecordNewColumn()
+inoremap <silent> <script> <Plug>(InsertFromEnterAndIndent) <SID>(RecordPreviousColumn)$<Left><CR><SID>(RecordNewColumn)<Esc>:call InsertFromAround#Newline#Insert()<CR>
 " This will repeat the <Enter> or just the text entered after the mapping (if
 " done) on "." in normal mode.
 if ! hasmapto('<Plug>(InsertFromEnterAndIndent)', 'i')
