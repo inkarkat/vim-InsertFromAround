@@ -213,6 +213,7 @@ IDEAS						      *InsertFromAround-ideas*
 HISTORY						    *InsertFromAround-history*
 
 1.11	RELEASEME
+- Make <C-CR> handle comment prefixes, not just indent.
 *** You need to update to ingo-library (vimscript #4433) version 1.030! ***
 
 1.10	03-Apr-2014
