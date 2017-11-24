@@ -55,7 +55,7 @@ CTRL-Enter		Insert newline and indent the new line to the current
 							 *i_CTRL-E* *i_CTRL-Y*
 CTRL-E / CTRL-Y		Insert the character from unfolded lines below / above
 			the cursor; if the adjacent line is not that long,
-			look beyond. The command beeps and suspends insert
+			mook beyond. The command beeps and suspends insert
 			once if the current target line has been exhausted.
 					   *i_CTRL-G_CTRL-E* *i_CTRL-G_CTRL-Y*
 CTRL-G CTRL-E / CTRL-G CTRL-Y
@@ -76,13 +76,13 @@ CTRL-G CTRL-U		Replace the text before the cursor with the indent
 			(Mnemonic: Undo the effect of |i_CTRL-U|.)
 
 
-							     *i_CTRL-G_CTRL-D*
-CTRL-G CTRL-D		Remove whitespace before the cursor so that the
+							     *i_CTRL-G_CTRL-B*
+CTRL-G CTRL-B		Remove whitespace before the cursor so that the
 			current cursor position aligns with the start of
 			preceding non-whitespace text in the previous unfolded
 			line.
-							     *i_CTRL-G_CTRL-T*
-CTRL-G CTRL-T		Insert whitespace so that the text after the cursor
+							     *i_CTRL-G_CTRL-A*
+CTRL-G CTRL-A		Insert whitespace so that the text after the cursor
 			aligns with the start of following non-whitespace text
 			(and the end of the text) in the previous unfolded
 			line.
@@ -111,7 +111,7 @@ foo ~
     bar ~
 
 
-Insert the character, character, then word, word from above.
+Insert the character, character, then word, word from above:
 A very long example provides context. ~
 Short one. ~
     I'm here|~
@@ -125,7 +125,7 @@ Short one. ~
     I'm hereexample provides| ~
 
 
-Insert the additional indent from next nearby lines.
+Insert the additional indent from next nearby lines:
     FOO            BAR        BAZ~
            HI ~
 |ere ~
@@ -135,19 +135,19 @@ v CTRL-G CTRL-U
            |ere ~
 
 
-Align with the start of preceding text fragments.
+Align with the start of preceding text fragments:
     FOO            BAR        BAZ~
 |ere ~
-v CTRL-G CTRL-T
+v CTRL-G CTRL-A
     |ere ~
-    v CTRL-G CTRL-T
+    v CTRL-G CTRL-A
                    |ere ~
-                   v CTRL-G CTRL-T
+                   v CTRL-G CTRL-A
                               |ere ~
-                              v CTRL-G CTRL-D
+                              v CTRL-G CTRL-B
                    |ere ~
 
-Align "Nothing" with the closest match of the character "N" found nearby.
+Align "Nothing" with the closest match of the character "N" found nearby:
     NOO            BAR        NAZ~
            NI ~
 |othing ~
@@ -158,7 +158,7 @@ v CTRL-G CTRL-U
            v CTRL-G CTRL-U
                               |othing ~
 
-Align on = with the closest match found nearby.
+Align on = with the closest match found nearby:
     class="bar" alt="ni" ~
 |ummary="foo" ~
 v CTRL-G V =
@@ -197,8 +197,8 @@ If you want to use different mappings, map your keys to the
     imap <C-g><C-e> <Plug>(InsertFromTextBelowToggle)
     imap <C-g><C-y> <Plug>(InsertFromTextAboveToggle)
     imap <C-g><C-u> <Plug>(InsertFromIndent)
-    imap <C-g><C-d> <Plug>(InsertFromAlignToPrevious)
-    imap <C-g><C-t> <Plug>(InsertFromAlignToNext)
+    imap <C-g><C-b> <Plug>(InsertFromAlignToPrevious)
+    imap <C-g><C-a> <Plug>(InsertFromAlignToNext)
 <
 ==============================================================================
 LIMITATIONS					*InsertFromAround-limitations*
@@ -214,6 +214,10 @@ HISTORY						    *InsertFromAround-history*
 
 1.11	RELEASEME
 - Make <C-CR> handle comment prefixes, not just indent.
+- CHG: Rename i_CTRL-G_CTRL-D / i_CTRL-G_CTRL-T default mappings to
+  i_CTRL-G_CTRL-B ("before") / i_CTRL-G_CTRL-A ("after"). I need the original
+  mappings to toggle i_CTRL-D / i_CTRL-T in my IndentCommentPrefix.vim plugin
+  for toggling similar to i_CTRL-G_CTRL-E here.
 *** You need to update to ingo-library (vimscript #4433) version 1.030! ***
 
 1.10	03-Apr-2014
