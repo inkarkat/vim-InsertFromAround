@@ -209,7 +209,7 @@ below).
 HISTORY
 ------------------------------------------------------------------------------
 
-##### 1.11    RELEASEME
+##### 1.11    04-Nov-2018
 - Make <C-CR> handle comment prefixes, not just indent.
 - CHG: Rename i\_CTRL-G\_CTRL-D / i\_CTRL-G\_CTRL-T default mappings to
   i\_CTRL-G\_CTRL-B ("before") / i\_CTRL-G\_CTRL-A ("after"). I need the original
