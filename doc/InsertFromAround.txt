@@ -224,7 +224,7 @@ below).
 ==============================================================================
 HISTORY						    *InsertFromAround-history*
 
-1.11	RELEASEME
+1.11	04-Nov-2018
 - Make <C-CR> handle comment prefixes, not just indent.
 - CHG: Rename i_CTRL-G_CTRL-D / i_CTRL-G_CTRL-T default mappings to
   i_CTRL-G_CTRL-B ("before") / i_CTRL-G_CTRL-A ("after"). I need the original

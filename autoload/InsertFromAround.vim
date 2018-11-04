@@ -3,13 +3,10 @@
 " DEPENDENCIES:
 "   - ingo/folds.vim autoload script
 "
-" Copyright: (C) 2009-2013 Ingo Karkat
+" Copyright: (C) 2009-2018 Ingo Karkat
 "   The VIM LICENSE applies to this script; see ':help copyright'.
 "
 " Maintainer:	Ingo Karkat <ingo@karkat.de>
-"
-" REVISION	DATE		REMARKS
-"   1.00.001	14-Apr-2013	file creation from ingomappings.vim
 
 function! InsertFromAround#SearchNextVisible( lnum, pattern, direction )
     let l:lnum = a:lnum

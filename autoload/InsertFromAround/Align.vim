@@ -4,24 +4,10 @@
 "   - ingo/compat.vim autoload script
 "   - ingo/query/get.vim autoload script
 "
-" Copyright: (C) 2013-2014 Ingo Karkat
+" Copyright: (C) 2013-2018 Ingo Karkat
 "   The VIM LICENSE applies to this script; see ':help copyright'.
 "
 " Maintainer:	Ingo Karkat <ingo@karkat.de>
-"
-" REVISION	DATE		REMARKS
-"   1.10.003	30-Jan-2014	Implement alignment to queried character.
-"				FIX: Buffer bounds check in
-"				s:FindClosestColumn() needs to consider the
-"				a:direction, or it won't work when the current
-"				line is at the opposite side.
-"   1.10.002	29-Jan-2014	ENH: Also consider previous lines when the
-"				closer lines are shorter than the cursor column.
-"				Factor out s:AlignToNext().
-"				Implement alignment to current character via
-"				InsertFromAround#Align#ToCurrentChar() and
-"				s:GetClosestCharTextColumn().
-"   1.00.001	23-Apr-2013	file creation
 
 function! s:AlignToNext( baseVirtCol, TargetColumnFuncref, ... )
     " Use i_CTRL-R to insert the indenting <Tab> characters as typed, so that
