@@ -6,34 +6,10 @@
 "   - InsertFromAround/Newline.vim autoload script
 "   - InsertFromAround/Text.vim autoload script
 "
-" Copyright: (C) 2009-2017 Ingo Karkat
+" Copyright: (C) 2009-2018 Ingo Karkat
 "   The VIM LICENSE applies to this script; see ':help copyright'.
 "
 " Maintainer:	Ingo Karkat <ingo@karkat.de>
-"
-" REVISION	DATE		REMARKS
-"   1.11.007	24-Nov-2017	CHG: Rename i_CTRL-G_CTRL-D / i_CTRL-G_CTRL-T
-"				default mappings to i_CTRL-G_CTRL-B ("before") /
-"				i_CTRL-G_CTRL-A ("after"). I need the original
-"				mappings to toggle i_CTRL-D / i_CTRL-T in my
-"				IndentCommentPrefix.vim plugin for toggling
-"				similar to i_CTRL-G_CTRL-E here.
-"   1.11.006	12-Sep-2017	Make <C-CR> handle comment prefixes, not just
-"				indent. To correctly recognize a
-"				single-character prefix (#, or Vimscript's "),
-"				we need to also record the column after pressing
-"				<Enter>, as the following <Esc> will move the
-"				cursor left and obscure the character.
-"   1.10.005	29-Jan-2014	Implement <C-g><C-v> mapping that aligns to the
-"				current character found in adjacent lines.
-"   1.00.004	23-Jan-2014	Define <Plug>-mappings for the remaining
-"				hard-coded mappings.
-"	003	02-Aug-2013	CHG: Remap <S-CR> to <C-CR>, as I need the
-"				<S-CR> imap for a mapping consistent with normal
-"				mode.
-"	002	04-Jun-2013	FIX: <S-CR> mapping broken by incomplete
-"				factoring out of <SID>(RecordColumn).
-"	001	14-Apr-2013	file creation from ingomappings.vim
 
 " Avoid installing twice or when in unsupported Vim version.
 if exists('g:loaded_InsertFromAround') || (v:version < 700)
