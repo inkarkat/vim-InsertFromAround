@@ -1,4 +1,4 @@
-INSERT FROM AROUND   
+INSERT FROM AROUND
 ===============================================================================
 _by Ingo Karkat_
 
@@ -8,7 +8,7 @@ DESCRIPTION
 With the proper indent settings, Vim will mostly supply the correct amount of
 indent when creating new lines. But sometimes, one needs a special amount of
 indent, and it is cumbersome to manually create that by repeatedly pressing
-<Tab>, <Space>, and <BS>.
+&lt;Tab&gt;, &lt;Space&gt;, and &lt;BS&gt;.
 
 This plugin defines insert mode mappings that indent a new line exactly at the
 current cursor position, or insert the indent used in adjacent lines, or align
@@ -64,11 +64,21 @@ USAGE
                             current cursor position aligns with the start of
                             preceding non-whitespace text in the previous unfolded
                             line.
+    <b                      Shift the current line leftwards so that its first
+                            non-blank character aligns with the start of [the
+                            count'th] preceding non-whitespace text in the
+                            previous unfolded line.
+                            Shortcut for ^ i_CTRL-G_CTRL-B <Esc>.
 
     CTRL-G CTRL-A           Insert whitespace so that the text after the cursor
                             aligns with the start of following non-whitespace text
                             (and the end of the text) in the previous unfolded
                             line.
+    >a                      Shift the current line rightwards so that its first
+                            non-blank character aligns with the start of [the
+                            count'th] following non-whitespace text in the
+                            previous unfolded line.
+                            Shortcut for ^ i_CTRL-G_CTRL-A <Esc>.
 
     CTRL-G CTRL-V           Insert whitespace so that the text after the cursor
                             aligns with the closest match of the (non-whitespace)
@@ -187,7 +197,7 @@ CONFIGURATION
 For a permanent configuration, put the following commands into your vimrc:
 
 If you want to use different mappings, map your keys to the
-<Plug>(InsertFrom...) mapping targets _before_ sourcing the script
+&lt;Plug&gt;(InsertFrom...) mapping targets _before_ sourcing the script
 (e.g. in your vimrc):
 
     imap <C-CR> <Plug>(InsertFromEnterAndIndent)
@@ -198,6 +208,8 @@ If you want to use different mappings, map your keys to the
     imap <C-g><C-u> <Plug>(InsertFromIndent)
     imap <C-g><C-b> <Plug>(InsertFromAlignToPrevious)
     imap <C-g><C-a> <Plug>(InsertFromAlignToNext)
+    nmap <b <Plug>(InsertFromAlignToPrevious)
+    nmap >a <Plug>(InsertFromAlignToNext)
 
 CONTRIBUTING
 ------------------------------------------------------------------------------
@@ -209,8 +221,12 @@ below).
 HISTORY
 ------------------------------------------------------------------------------
 
+##### 1.20    RELEASEME
+- ENH: Add &gt;a and &lt;b normal-mode variants that work like i\_CTRL-G\_CTRL-A/B on
+  the indent.
+
 ##### 1.11    04-Nov-2018
-- Make <C-CR> handle comment prefixes, not just indent.
+- Make &lt;C-CR&gt; handle comment prefixes, not just indent.
 - CHG: Rename i\_CTRL-G\_CTRL-D / i\_CTRL-G\_CTRL-T default mappings to
   i\_CTRL-G\_CTRL-B ("before") / i\_CTRL-G\_CTRL-A ("after"). I need the original
   mappings to toggle i\_CTRL-D / i\_CTRL-T in my IndentCommentPrefix.vim plugin
@@ -241,7 +257,7 @@ __You need to update to ingo-library ([vimscript #4433](http://www.vim.org/scrip
 - Started development.
 
 ------------------------------------------------------------------------------
-Copyright: (C) 2009-2018 Ingo Karkat -
+Copyright: (C) 2009-2019 Ingo Karkat -
 The [VIM LICENSE](http://vimdoc.sourceforge.net/htmldoc/uganda.html#license) applies to this plugin.
 
-Maintainer:     Ingo Karkat <ingo@karkat.de>
+Maintainer:     Ingo Karkat &lt;ingo@karkat.de&gt;
