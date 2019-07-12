@@ -64,20 +64,20 @@ USAGE
                             current cursor position aligns with the start of
                             preceding non-whitespace text in the previous unfolded
                             line.
-    <b                      Shift the current line leftwards so that its first
-                            non-blank character aligns with the start of [the
-                            count'th] preceding non-whitespace text in the
-                            previous unfolded line.
+    <b                      Shift the current line (after any comment prefix)
+                            leftwards so that its first non-blank character aligns
+                            with the start of [the count'th] preceding
+                            non-whitespace text in the previous unfolded line.
                             Shortcut for ^ i_CTRL-G_CTRL-B <Esc>.
 
     CTRL-G CTRL-A           Insert whitespace so that the text after the cursor
                             aligns with the start of following non-whitespace text
                             (and the end of the text) in the previous unfolded
                             line.
-    >a                      Shift the current line rightwards so that its first
-                            non-blank character aligns with the start of [the
-                            count'th] following non-whitespace text in the
-                            previous unfolded line.
+    >a                      Shift the current line (after any comment prefix)
+                            rightwards so that its first non-blank character
+                            aligns with the start of [the count'th] following
+                            non-whitespace text in the previous unfolded line.
                             Shortcut for ^ i_CTRL-G_CTRL-A <Esc>.
 
     CTRL-G CTRL-V           Insert whitespace so that the text after the cursor

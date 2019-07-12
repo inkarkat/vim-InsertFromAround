@@ -64,7 +64,7 @@ if ! hasmapto('<Plug>(InsertFromAlignToNext)', 'i')
     imap <C-g><C-a> <Plug>(InsertFromAlignToNext)
 endif
 
-nnoremap <silent> <Plug>(InsertFromAlignInsertAfterIndent) ^i
+nnoremap <expr> <Plug>(InsertFromAlignInsertAfterIndent) InsertFromAround#Align#GoToFirstNonBlank()
 nnoremap <silent> <Plug>(InsertFromAlignToPrevious)
 \ :<C-u>let g:InsertFromAround#count = v:count<Bar>
 \execute "normal \<lt>Plug>(InsertFromAlignInsertAfterIndent)". repeat("\<lt>Plug>(InsertFromAlignToPrevious)", v:count1) . "\<lt>C-\>\<lt>C-n>l"<Bar>
