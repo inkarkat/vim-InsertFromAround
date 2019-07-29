@@ -176,7 +176,6 @@ endfunction
 function! InsertFromAround#Align#GoToFirstNonBlank() abort
     let l:indent = ingo#comments#SplitIndentAndText(getline('.'))[0]
     call cursor(line('.'), len(l:indent) + 1)
-    return 'i'
 endfunction
 
 " vim: set ts=8 sts=4 sw=4 noexpandtab ff=unix fdm=syntax :
