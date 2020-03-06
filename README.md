@@ -188,7 +188,7 @@ To uninstall, use the :RmVimball command.
 ### DEPENDENCIES
 
 - Requires Vim 7.0 or higher.
-- Requires the ingo-library.vim plugin ([vimscript #4433](http://www.vim.org/scripts/script.php?script_id=4433)), version 1.030 or
+- Requires the ingo-library.vim plugin ([vimscript #4433](http://www.vim.org/scripts/script.php?script_id=4433)), version 1.041 or
   higher.
 
 CONFIGURATION
@@ -225,6 +225,8 @@ HISTORY
 - ENH: Add &gt;a and &lt;b normal-mode variants that work like i\_CTRL-G\_CTRL-A/B on
   the indent.
 
+__You need to update to ingo-library ([vimscript #4433](http://www.vim.org/scripts/script.php?script_id=4433)) version 1.041!__
+
 ##### 1.11    04-Nov-2018
 - Make &lt;C-CR&gt; handle comment prefixes, not just indent.
 - CHG: Rename i\_CTRL-G\_CTRL-D / i\_CTRL-G\_CTRL-T default mappings to
@@ -257,7 +259,7 @@ __You need to update to ingo-library ([vimscript #4433](http://www.vim.org/scrip
 - Started development.
 
 ------------------------------------------------------------------------------
-Copyright: (C) 2009-2019 Ingo Karkat -
+Copyright: (C) 2009-2020 Ingo Karkat -
 The [VIM LICENSE](http://vimdoc.sourceforge.net/htmldoc/uganda.html#license) applies to this plugin.
 
 Maintainer:     Ingo Karkat &lt;ingo@karkat.de&gt;
