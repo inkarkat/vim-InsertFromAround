@@ -221,7 +221,7 @@ below).
 HISTORY
 ------------------------------------------------------------------------------
 
-##### 1.20    RELEASEME
+##### 1.20    10-Nov-2024
 - ENH: Add &gt;a and &lt;b normal-mode variants that work like i\_CTRL-G\_CTRL-A/B on
   the indent.
 
@@ -259,7 +259,7 @@ __You need to update to ingo-library ([vimscript #4433](http://www.vim.org/scrip
 - Started development.
 
 ------------------------------------------------------------------------------
-Copyright: (C) 2009-2020 Ingo Karkat -
+Copyright: (C) 2009-2024 Ingo Karkat -
 The [VIM LICENSE](http://vimdoc.sourceforge.net/htmldoc/uganda.html#license) applies to this plugin.
 
 Maintainer:     Ingo Karkat &lt;ingo@karkat.de&gt;

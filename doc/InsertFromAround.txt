@@ -236,7 +236,7 @@ below).
 ==============================================================================
 HISTORY						    *InsertFromAround-history*
 
-1.20	RELEASEME
+1.20	10-Nov-2024
 - ENH: Add >a and <b normal-mode variants that work like i_CTRL-G_CTRL-A/B on
   the indent.
   *** You need to update to ingo-library (vimscript #4433) version 1.041! ***
@@ -270,7 +270,7 @@ Separated into independent plugin.
 Started development.
 
 ==============================================================================
-Copyright: (C) 2009-2020 Ingo Karkat
+Copyright: (C) 2009-2024 Ingo Karkat
 The VIM LICENSE applies to this plugin; see |copyright|.
 
 Maintainer:	Ingo Karkat <ingo@karkat.de>
