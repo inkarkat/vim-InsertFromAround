@@ -1,19 +1,13 @@
 " InsertFromAround/Indent.vim: Fetch indent from surrounding lines.
 "
 " DEPENDENCIES:
-"   - InsertFromAround.vim autoload script
-"   - ingo/compat.vim autoload script
+"   - ingo-library.vim plugin
 "
-" Copyright: (C) 2009-2018 Ingo Karkat
+" Copyright: (C) 2009-2020 Ingo Karkat
 "   The VIM LICENSE applies to this script; see ':help copyright'.
 "
 " Maintainer:	Ingo Karkat <ingo@karkat.de>
 
-function! s:SortByDisplayWidth( i1, i2 )
-    let l:w1 = ingo#compat#strdisplaywidth(a:i1)
-    let l:w2 = ingo#compat#strdisplaywidth(a:i2)
-    return (l:w1 == l:w2 ? 0 : l:w1 > l:w2 ? 1 : -1)
-endfunction
 function! s:DeltaIndent( indent )
     let l:widthBeforeCursor = virtcol('.') - 1
     if l:widthBeforeCursor == 0
@@ -58,7 +52,7 @@ function! InsertFromAround#Indent#Insert()
     \		filter([l:targetLineAbove, l:targetLineBelow], 'v:val > 0'),
     \		'matchstr(getline(v:val), "^\\s\\+")'
     \	    ),
-    \       's:SortByDisplayWidth'
+    \       function('ingo#collections#StringDisplayWidthAscSort')
     \   )
     if len(l:indents) > 0
 	let l:indent = l:indents[0]

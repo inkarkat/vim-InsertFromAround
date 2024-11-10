@@ -80,12 +80,22 @@ CTRL-G CTRL-U		Replace the text before the cursor with the indent
 CTRL-G CTRL-B		Remove whitespace before the cursor so that the
 			current cursor position aligns with the start of
 			preceding non-whitespace text in the previous unfolded
-			line.
+			line.						  *<b*
+<b			Shift the current line (after any comment prefix)
+			leftwards so that its first non-blank character aligns
+			with the start of [the count'th] preceding
+			non-whitespace text in the previous unfolded line.
+			Shortcut for |^| |i_CTRL-G_CTRL-B| |<Esc>|.
 							     *i_CTRL-G_CTRL-A*
 CTRL-G CTRL-A		Insert whitespace so that the text after the cursor
 			aligns with the start of following non-whitespace text
 			(and the end of the text) in the previous unfolded
-			line.
+			line.						  *>a*
+>a			Shift the current line (after any comment prefix)
+			rightwards so that its first non-blank character
+			aligns with the start of [the count'th] following
+			non-whitespace text in the previous unfolded line.
+			Shortcut for |^| |i_CTRL-G_CTRL-A| |<Esc>|.
 
 							     *i_CTRL-G_CTRL-V*
 CTRL-G CTRL-V		Insert whitespace so that the text after the cursor
@@ -186,7 +196,7 @@ To uninstall, use the |:RmVimball| command.
 DEPENDENCIES				       *InsertFromAround-dependencies*
 
 - Requires Vim 7.0 or higher.
-- Requires the |ingo-library.vim| plugin (vimscript #4433), version 1.030 or
+- Requires the |ingo-library.vim| plugin (vimscript #4433), version 1.041 or
   higher.
 
 ==============================================================================
@@ -205,6 +215,8 @@ If you want to use different mappings, map your keys to the
     imap <C-g><C-u> <Plug>(InsertFromIndent)
     imap <C-g><C-b> <Plug>(InsertFromAlignToPrevious)
     imap <C-g><C-a> <Plug>(InsertFromAlignToNext)
+    nmap <b <Plug>(InsertFromAlignToPrevious)
+    nmap >a <Plug>(InsertFromAlignToNext)
 <
 ==============================================================================
 LIMITATIONS					*InsertFromAround-limitations*
@@ -223,6 +235,11 @@ below).
 
 ==============================================================================
 HISTORY						    *InsertFromAround-history*
+
+1.20	10-Nov-2024
+- ENH: Add >a and <b normal-mode variants that work like i_CTRL-G_CTRL-A/B on
+  the indent.
+  *** You need to update to ingo-library (vimscript #4433) version 1.041! ***
 
 1.11	04-Nov-2018
 - Make <C-CR> handle comment prefixes, not just indent.
@@ -253,7 +270,7 @@ Separated into independent plugin.
 Started development.
 
 ==============================================================================
-Copyright: (C) 2009-2018 Ingo Karkat
+Copyright: (C) 2009-2024 Ingo Karkat
 The VIM LICENSE applies to this plugin; see |copyright|.
 
 Maintainer:	Ingo Karkat <ingo@karkat.de>

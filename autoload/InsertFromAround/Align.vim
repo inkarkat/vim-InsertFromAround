@@ -1,10 +1,9 @@
 " InsertFromAround/Align.vim: Align to text from previous line.
 "
 " DEPENDENCIES:
-"   - ingo/compat.vim autoload script
-"   - ingo/query/get.vim autoload script
+"   - ingo-library.vim plugin
 "
-" Copyright: (C) 2013-2018 Ingo Karkat
+" Copyright: (C) 2013-2019 Ingo Karkat
 "   The VIM LICENSE applies to this script; see ':help copyright'.
 "
 " Maintainer:	Ingo Karkat <ingo@karkat.de>
@@ -171,6 +170,12 @@ function! InsertFromAround#Align#ToQueriedChar()
 
     let l:baseVirtCol = ingo#compat#strdisplaywidth(strpart(getline('.'), 0, l:baseCol - 1)) + 1 " Do not include the searched character in the width calculation, and instead add one. This gives the correct start column when the matched character has a width of multiple screen cells.
     return s:AlignToNext(l:baseVirtCol, function('s:GetClosestCharTextColumn'), l:char)
+endfunction
+
+
+function! InsertFromAround#Align#GoToFirstNonBlank() abort
+    let l:indent = ingo#comments#SplitIndentAndText(getline('.'))[0]
+    call cursor(line('.'), len(l:indent) + 1)
 endfunction
 
 " vim: set ts=8 sts=4 sw=4 noexpandtab ff=unix fdm=syntax :

@@ -6,7 +6,7 @@
 "   - InsertFromAround/Newline.vim autoload script
 "   - InsertFromAround/Text.vim autoload script
 "
-" Copyright: (C) 2009-2018 Ingo Karkat
+" Copyright: (C) 2009-2019 Ingo Karkat
 "   The VIM LICENSE applies to this script; see ':help copyright'.
 "
 " Maintainer:	Ingo Karkat <ingo@karkat.de>
@@ -62,6 +62,23 @@ endif
 inoremap <silent> <Plug>(InsertFromAlignToNext) <C-r>=InsertFromAround#Align#ToNext()<CR>
 if ! hasmapto('<Plug>(InsertFromAlignToNext)', 'i')
     imap <C-g><C-a> <Plug>(InsertFromAlignToNext)
+endif
+
+nnoremap <silent> <Plug>(InsertFromAlignToPrevious)
+\ :<C-u>let g:InsertFromAround#count = v:count<Bar>
+\call InsertFromAround#Align#GoToFirstNonBlank()<Bar>
+\execute 'normal i' . repeat("\<lt>Plug>(InsertFromAlignToPrevious)", v:count1) . "\<lt>C-\>\<lt>C-n>l"<Bar>
+\silent! call repeat#set("\<lt>Plug>(InsertFromAlignToPrevious)", g:InsertFromAround#count)<CR>
+nnoremap <silent> <Plug>(InsertFromAlignToNext)
+\ :<C-u>let g:InsertFromAround#count = v:count<Bar>
+\call InsertFromAround#Align#GoToFirstNonBlank()<Bar>
+\execute 'normal i' . repeat("\<lt>Plug>(InsertFromAlignToNext)", v:count1) . "\<lt>C-\>\<lt>C-n>l"<Bar>
+\silent! call repeat#set("\<lt>Plug>(InsertFromAlignToNext)", g:InsertFromAround#count)<CR>
+if ! hasmapto('<Plug>(InsertFromAlignToPrevious)', 'n')
+    nmap <b <Plug>(InsertFromAlignToPrevious)
+endif
+if ! hasmapto('<Plug>(InsertFromAlignToNext)', 'n')
+    nmap >a <Plug>(InsertFromAlignToNext)
 endif
 
 inoremap <silent> <Plug>(InsertFromAlignToCurrentChar) <C-r>=InsertFromAround#Align#ToCurrentChar()<CR>
